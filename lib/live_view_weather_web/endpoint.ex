@@ -1,6 +1,8 @@
 defmodule LiveViewWeatherWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :live_view_weather
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", LiveViewWeatherWeb.UserSocket,
     websocket: [timeout: 45_000],
     longpoll: false

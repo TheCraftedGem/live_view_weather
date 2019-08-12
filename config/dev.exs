@@ -28,6 +28,11 @@ config :live_view_weather, LiveViewWeatherWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
+  ],
+  live_reload: [
+    patterns: [
+      ~r{lib/live_view_weather_web/live/.*(ex)$}
+    ]
   ]
 
 # ## SSL Support
