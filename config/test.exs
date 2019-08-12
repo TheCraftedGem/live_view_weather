@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :live_view_weather, LiveViewWeather.Repo,
-  username: "postgres",
-  password: "postgres",
+  # username: "postgres",
+  # password: "postgres",
   database: "live_view_weather_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

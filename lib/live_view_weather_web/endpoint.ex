@@ -2,7 +2,7 @@ defmodule LiveViewWeatherWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :live_view_weather
 
   socket "/socket", LiveViewWeatherWeb.UserSocket,
-    websocket: true,
+    websocket: [timeout: 45_000],
     longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
