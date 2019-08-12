@@ -1,6 +1,17 @@
 # LiveViewWeather
 
-To start your Phoenix server:
+## ENV Variables
+
+1. Create `.env` file in the root of your project with this syntax for your keys:
+
+```
+export BING_API_KEY="insert-key-here"
+export DARK_SKY_API_KEY="insert-key-here"
+```
+
+2. In your terminal run `source .env`
+
+## To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
@@ -8,13 +19,3 @@ To start your Phoenix server:
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
