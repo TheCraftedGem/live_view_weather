@@ -28,6 +28,11 @@ config :live_view_weather, LiveViewWeatherWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
+  ],
+  live_reload: [
+    patterns: [
+      ~r{lib/live_view_weather_web/live/.*(ex)$}
+    ]
   ]
 
 # ## SSL Support
@@ -74,3 +79,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix,
+  template_engines: [leex: Phoenix.LiveView.Engine]

@@ -12,6 +12,9 @@ config :live_view_weather,
 
 # Configures the endpoint
 config :live_view_weather, LiveViewWeatherWeb.Endpoint,
+  live_view: [
+     signing_salt: "nc+NsNrhgrmlnFDFvb53b1K2JRez6uOx"
+   ],
   url: [host: "localhost"],
   secret_key_base: "UW6SNAyKqiQkvjcLzZ38T579acVr6qARTsDDo3dpSrceIfOxMOBIpaCHx6LE9N5k",
   render_errors: [view: LiveViewWeatherWeb.ErrorView, accepts: ~w(html json)],
