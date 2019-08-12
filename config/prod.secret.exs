@@ -4,6 +4,9 @@
 # remember to add this file to your .gitignore.
 use Mix.Config
 
+bing_api_key = System.get_env("BING_API_KEY")
+dark_sky__api_key = System.get_env("DARK_SKY_API_KEY")
+
 database_url =
   System.get_env("DATABASE_URL") ||
     raise """
