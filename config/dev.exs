@@ -2,8 +2,8 @@ use Mix.Config
 
 # Configure your database
 config :live_view_weather, LiveViewWeather.Repo,
-  username: "postgres",
-  password: "postgres",
+  # username: "postgres",
+  # password: "postgres",
   database: "live_view_weather_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
