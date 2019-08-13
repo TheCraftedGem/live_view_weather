@@ -1,6 +1,14 @@
-# LiveViewWeather
+# [LiveViewWeather](https://live-view-weather.herokuapp.com/)
 
-## ENV Variables
+## Contributors
+- [Matt Levy](https://github.com/milevy1)
+- [Melvin Cedeno](https://github.com/TheCraftedGem)
+
+## Setup ENV Variables
+
+Sign up for an API key at the following sites:
+- [Bing Maps](https://docs.microsoft.com/en-us/bingmaps/rest-services/locations/find-a-location-by-query)
+- [DarkSky](https://darksky.net/dev) 
 
 1. Create `.env` file in the root of your project with this syntax for your keys:
 
