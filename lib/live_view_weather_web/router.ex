@@ -19,6 +19,7 @@ defmodule LiveViewWeatherWeb.Router do
 
     get "/", PageController, :index
     get "/test", PageController, :test
+    get "/autocomplete", PageController, :autocomplete
   end
 
   # Other scopes may use custom stacks.

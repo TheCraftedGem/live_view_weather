@@ -9,4 +9,8 @@ defmodule LiveViewWeatherWeb.PageController do
   def test(conn, _params) do
     LiveView.Controller.live_render(conn, LiveViewWeatherWeb.GithubDeployView, session: %{})
   end
+
+  def autocomplete(conn, _params) do
+    LiveView.Controller.live_render(conn, LiveViewWeatherWeb.Autocomplete, session: %{})
+  end
 end
