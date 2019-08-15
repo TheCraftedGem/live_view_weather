@@ -36,7 +36,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
       # Possibly where we can create other call
-      {:ok, cities} -> Enum.map(cities, fn city -> city.name  end)
+      {:ok, cities} -> Enum.map(cities, fn city -> city.coordinates |> Enum.map(fn coord -> Float.to_string(coord)end) end)
       {:error, _message} -> []
     end
   end
