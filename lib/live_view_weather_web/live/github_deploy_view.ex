@@ -21,13 +21,13 @@ defmodule LiveViewWeatherWeb.GithubDeployView do
     {:noreply, assign(socket, deploy_step: "Creating GitHub org...")}
   end
 
-  def handle_info({:create_repo, org}, socket) do
+  def handle_info({:create_repo, _org}, socket) do
     # {:ok, repo} = MyApp.create_repo(org)
     send(self(), {:push_contents, "repo"})
     {:noreply, assign(socket, deploy_step: "Creating GitHub repo...")}
   end
 
-  def handle_info({:push_contents, repo}, socket) do
+  def handle_info({:push_contents, _repo}, socket) do
     # :ok = MyApp.push_contents(repo)
     send(self(), :done)
     {:noreply, assign(socket, deploy_step: "Pushing to repo...")}
