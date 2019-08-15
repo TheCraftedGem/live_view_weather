@@ -21,12 +21,12 @@ defmodule LiveViewWeather.Services.BingApi do
     # data["coordinates"]
 
 # Cleaner Way To Handle Response, Kernel.get_in function needs atoms as certain args
-    # with {:ok, resp}    <- HTTPoison.get(url),
-    #     #  {:ok, decoded} <- Poison.decode(resp.body),
-    #      {:ok, decoded} <- Jason.Formatter.minimize(resp.body,),
-    #   coords            <- get_in(decoded, ~w[resourceSets resources geocodePoints coordinates]a) do
-    #   coords
-    # end
+    with {:ok, resp}    <- HTTPoison.get(url),
+         {:ok, decoded} <- Poison.decode(resp.body),
+        #  {:ok, decoded} <- Jason.Formatter.minimize(resp.body,),
+      coords            <- get_in(decoded, ~w[resourceSets coordinates]) do
+      coords
+    end
   end
 
 
