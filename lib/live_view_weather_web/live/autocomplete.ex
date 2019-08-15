@@ -9,12 +9,6 @@ defmodule LiveViewWeatherWeb.Autocomplete do
     LiveViewWeatherWeb.PageView.render("autocomplete.html", assigns)
   end
 
-  # def default_recommendation() do
-  #   default = [%AutocompleteResult{name: "Boston, Ma", coordinates: [42.35866165161133, -71.0567398071289]}]
-
-  #   default.coordinates
-  # end
-
   def mount(_session, socket) do
     {:ok, assign(socket, q: nil, recommendations: [])}
   end
@@ -25,21 +19,35 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
 
   def handle_event("get_weather", value, socket) do
-    IO.inspect(value, label: "Testing")
     {:noreply, assign(socket, recommendations: fetch_weather(value))}
   end
 
-  def fetch_weather(value) do
-    IO.inspect(value, label: "WOOOORD")
+  def fetch_weather(coords) do
+
+    # coords = String.split(coords, " ", trim: true)
+    uri_coords = coords
+    |> String.split(" ", trim: true)
+    |> Enum.join(",")
+
+    token = System.get_env("DARK_SKY_API_KEY")
+
+    url = URI.encode("https://api.darksky.net/forecast/#{token}/#{uri_coords}")
+    HTTPoison.get(url)
+
   end
 
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
+
       # Possibly where we can create other call
-      {:ok, cities} -> Enum.map(cities, fn city -> city.coordinates |> Enum.map(fn coord -> Float.to_string(coord)end) end)
+      {:ok, cities} -> Enum.map(cities, fn city ->
+        [city.name, Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end)] end)
+
       {:error, _message} -> []
     end
   end
+
+  # |> Enum.map(fn coord -> Float.to_string(coord)
 
   def bing_cities(q) do
     token = System.get_env("BING_API_KEY")
