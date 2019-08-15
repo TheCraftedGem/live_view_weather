@@ -1,9 +1,8 @@
 <form action="#" phx-change="autocomplete">
   <div style="width:300px;">
     <input value="<%= @q %>" id="myInput" type="text" name="q" placeholder="Enter a city">
-    <p><%= Enum.each(@recommendations,  &(&1))%> </br></p>
   </div>
-  <input type="submit">
+  
 </form>
 
 <%= for recommendation <- @recommendations do %>
@@ -12,3 +11,9 @@
     <button phx-click="get_weather"  phx-value="<%= Enum.at(recommendation, 1) %>">Check Weather</button> 
   </div>
 <% end %>
+
+
+<div>
+  <%= @the_goods %>
+</div>
+

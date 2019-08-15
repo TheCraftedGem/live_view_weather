@@ -10,7 +10,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
 
   def mount(_session, socket) do
-    {:ok, assign(socket, q: nil, recommendations: [])}
+    {:ok, assign(socket, q: nil, recommendations: [], the_goods: [])}
   end
 
   def handle_event("autocomplete", value, socket) do
@@ -19,7 +19,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
 
   def handle_event("get_weather", value, socket) do
-    {:noreply, assign(socket, recommendations: fetch_weather(value))}
+    {:noreply, assign(socket, the_goods: fetch_weather(value))}
   end
 
   def fetch_weather(coords) do
@@ -32,8 +32,9 @@ defmodule LiveViewWeatherWeb.Autocomplete do
     token = System.get_env("DARK_SKY_API_KEY")
 
     url = URI.encode("https://api.darksky.net/forecast/#{token}/#{uri_coords}")
-    HTTPoison.get(url)
-
+    {:ok, resp} = HTTPoison.get(url)
+    {:ok, goods} = Jason.decode(resp.body)
+    goods["currently"]["apparentTemperature"]
   end
 
   defp fetch_autocomplete(q) do
