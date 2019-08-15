@@ -1,7 +1,13 @@
-<form phx-change="autocomplete">
+<form action="#" phx-change="autocomplete">
   <div style="width:300px;">
     <input value="<%= @q %>" id="myInput" type="text" name="q" placeholder="Enter a city">
     <p><%= @recommendations %></p>
   </div>
   <input type="submit">
 </form>
+
+<%= for recommendation <- @recommendations do %>
+  <div>
+    <button phx-click="get_weather"  phx-value="<%= recommendation %>">Check Weather</button> %>
+  </div>
+<% end %>

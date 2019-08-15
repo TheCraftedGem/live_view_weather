@@ -9,19 +9,34 @@ defmodule LiveViewWeatherWeb.Autocomplete do
     LiveViewWeatherWeb.PageView.render("autocomplete.html", assigns)
   end
 
+  # def default_recommendation() do
+  #   default = [%AutocompleteResult{name: "Boston, Ma", coordinates: [42.35866165161133, -71.0567398071289]}]
+
+  #   default.coordinates
+  # end
+
   def mount(_session, socket) do
-    {:ok, assign(socket, q: nil, recommendations: nil)}
+    {:ok, assign(socket, q: nil, recommendations: [])}
   end
 
   def handle_event("autocomplete", value, socket) do
     q = String.trim(value["q"])
-
     {:noreply, assign(socket, recommendations: fetch_autocomplete(q))}
+  end
+
+  def handle_event("get_weather", value, socket) do
+    IO.inspect(value, label: "Testing")
+    {:noreply, assign(socket, recommendations: fetch_weather(value))}
+  end
+
+  def fetch_weather(value) do
+    IO.inspect(value, label: "WOOOORD")
   end
 
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
-      {:ok, cities} -> Enum.map(cities, fn city -> city.name end)
+      # Possibly where we can create other call
+      {:ok, cities} -> Enum.map(cities, fn city -> city.name  end)
       {:error, _message} -> []
     end
   end
@@ -32,7 +47,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
     # Note to cache results from API call here
     with {:ok, resp} <- HTTPoison.get(url),
-      resp <- IO.inspect(resp, label: "RESP"),
+      # resp <- IO.inspect(resp, label: "RESP"),
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
