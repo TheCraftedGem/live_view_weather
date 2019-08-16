@@ -10,21 +10,45 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
 
   def mount(_session, socket) do
-    {:ok, assign(socket, q: nil, recommendations: nil)}
+    {:ok, assign(socket, q: nil, recommendations: [], the_goods: [])}
   end
 
   def handle_event("autocomplete", value, socket) do
     q = String.trim(value["q"])
-
     {:noreply, assign(socket, recommendations: fetch_autocomplete(q))}
+  end
+
+  def handle_event("get_weather", value, socket) do
+    {:noreply, assign(socket, the_goods: fetch_weather(value))}
+  end
+
+  def fetch_weather(coords) do
+
+    # coords = String.split(coords, " ", trim: true)
+    uri_coords = coords
+    |> String.split(" ", trim: true)
+    |> Enum.join(",")
+
+    token = System.get_env("DARK_SKY_API_KEY")
+
+    url = URI.encode("https://api.darksky.net/forecast/#{token}/#{uri_coords}")
+    {:ok, resp} = HTTPoison.get(url)
+    {:ok, goods} = Jason.decode(resp.body)
+    goods["currently"]["apparentTemperature"]
   end
 
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
-      {:ok, cities} -> Enum.map(cities, fn city -> city.name end)
+
+      # Possibly where we can create other call
+      {:ok, cities} -> Enum.map(cities, fn city ->
+        [city.name, Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end)] end)
+
       {:error, _message} -> []
     end
   end
+
+  # |> Enum.map(fn coord -> Float.to_string(coord)
 
   def bing_cities(q) do
     token = System.get_env("BING_API_KEY")
@@ -32,7 +56,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
     # Note to cache results from API call here
     with {:ok, resp} <- HTTPoison.get(url),
-      resp <- IO.inspect(resp, label: "RESP"),
+      # resp <- IO.inspect(resp, label: "RESP"),
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
