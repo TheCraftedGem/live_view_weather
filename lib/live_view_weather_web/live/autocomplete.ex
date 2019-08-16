@@ -34,29 +34,19 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
-
-      # Possibly where we can create other call
-      # List of structs
       {:ok, cities} -> Enum.map(cities, fn city ->
         %{city | current_temp: fetch_weather(city.coordinates)}
       end)
-
-        # Enum.map(cities, fn city ->
-        # [city.name, Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end)] end)
-
       {:error, _message} -> []
     end
   end
-
-  # |> Enum.map(fn coord -> Float.to_string(coord)
 
   def bing_cities(q) do
     token = System.get_env("BING_API_KEY")
     url = URI.encode("http://dev.virtualearth.net/REST/v1/Locations?query=#{q}&key=#{token}")
 
     # Note to cache results from API call here
-    with {:ok, resp} <- HTTPoison.get(url),
-      # resp <- IO.inspect(resp, label: "RESP"),
+    with {:ok, resp} <- HTTPoison.get(url),,
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
