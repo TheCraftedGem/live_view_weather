@@ -46,7 +46,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
     url = URI.encode("http://dev.virtualearth.net/REST/v1/Locations?query=#{q}&key=#{token}")
 
     # Note to cache results from API call here
-    with {:ok, resp} <- HTTPoison.get(url),,
+    with {:ok, resp} <- HTTPoison.get(url),
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
