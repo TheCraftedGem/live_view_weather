@@ -1,5 +1,5 @@
 defmodule AutocompleteResult do
-  defstruct [:name, :coordinates]
+  defstruct [:name, :coordinates, :current_temp]
 end
 
 defmodule LiveViewWeatherWeb.Autocomplete do
@@ -23,32 +23,23 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
 
   def fetch_weather(coords) do
-
-    # coords = String.split(coords, " ", trim: true)
-    uri_coords = coords
-    |> String.split(" ", trim: true)
-    |> Enum.join(",")
-
+    uri_coords = Enum.join(coords, ",")
     token = System.get_env("DARK_SKY_API_KEY")
 
     url = URI.encode("https://api.darksky.net/forecast/#{token}/#{uri_coords}")
     {:ok, resp} = HTTPoison.get(url)
     {:ok, goods} = Jason.decode(resp.body)
-    goods["currently"]["apparentTemperature"]
+    Float.to_string(goods["currently"]["apparentTemperature"])
   end
 
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
-
-      # Possibly where we can create other call
       {:ok, cities} -> Enum.map(cities, fn city ->
-        [city.name, Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end)] end)
-
+        %{city | current_temp: fetch_weather(city.coordinates)}
+      end)
       {:error, _message} -> []
     end
   end
-
-  # |> Enum.map(fn coord -> Float.to_string(coord)
 
   def bing_cities(q) do
     token = System.get_env("BING_API_KEY")
@@ -56,7 +47,6 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
     # Note to cache results from API call here
     with {:ok, resp} <- HTTPoison.get(url),
-      # resp <- IO.inspect(resp, label: "RESP"),
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
