@@ -5,7 +5,10 @@
   
 </form>
 
-<%= for recommendation <- @recommendations do %>
+<%= for recommendation <- x@recommendations do %>
+  <div>
+    <%= @the_goods %>
+  </div>
   <div>
     <%= Enum.at(recommendation, 0) %>
     <button phx-click="get_weather"  phx-value="<%= Enum.at(recommendation, 1) %>">Check Weather</button> 
@@ -13,7 +16,5 @@
 <% end %>
 
 
-<div>
-  <%= @the_goods %>
-</div>
+
 

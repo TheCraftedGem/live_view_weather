@@ -15,7 +15,7 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
   def handle_event("autocomplete", value, socket) do
     q = String.trim(value["q"])
-    {:noreply, assign(socket, recommendations: fetch_autocomplete(q))}
+    {:noreply, assign(socket, recommendations: fetch_autocomplete(q), the_goods: fetch_weather(value))}
   end
 
   def handle_event("get_weather", value, socket) do
@@ -40,15 +40,13 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   defp fetch_autocomplete(q) do
     case bing_cities(q) do
 
-      # Possibly where we can create other call
       {:ok, cities} -> Enum.map(cities, fn city ->
         [city.name, Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end)] end)
+        # fetch_weather(Enum.reduce(city.coordinates, "", fn x, acc -> acc <> "#{x} " end))
 
       {:error, _message} -> []
     end
   end
-
-  # |> Enum.map(fn coord -> Float.to_string(coord)
 
   def bing_cities(q) do
     token = System.get_env("BING_API_KEY")
@@ -56,7 +54,6 @@ defmodule LiveViewWeatherWeb.Autocomplete do
 
     # Note to cache results from API call here
     with {:ok, resp} <- HTTPoison.get(url),
-      # resp <- IO.inspect(resp, label: "RESP"),
       {:ok, decoded} <- Jason.decode(resp.body),
       {:ok, cities} <- extract_resource_sets(decoded) do
       {:ok, cities}
@@ -87,3 +84,4 @@ defmodule LiveViewWeatherWeb.Autocomplete do
   end
   def get_autocomplete_result(_params), do: []
 end
+
