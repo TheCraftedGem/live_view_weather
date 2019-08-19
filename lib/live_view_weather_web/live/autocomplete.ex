@@ -29,7 +29,15 @@ defmodule LiveViewWeatherWeb.Autocomplete do
     url = URI.encode("https://api.darksky.net/forecast/#{token}/#{uri_coords}")
     {:ok, resp} = HTTPoison.get(url)
     {:ok, goods} = Jason.decode(resp.body)
-    Float.to_string(goods["currently"]["apparentTemperature"])
+    format_weather_response_for_view(goods["currently"]["apparentTemperature"])
+  end
+
+  def format_weather_response_for_view(temperature) when is_float(temperature) do
+    Float.to_string(temperature)
+  end
+
+  def format_weather_response_for_view(temperature) do
+    temperature
   end
 
   defp fetch_autocomplete(q) do
